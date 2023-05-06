@@ -29,7 +29,7 @@ exports.sendEmail = async (options) => {
       return info;
     }
   } catch (err) {
-    cosole.log(`Cannot Send Emai to : ${options.recipientEmail}`);
+    console.log(`Cannot Send Emai to : ${options.recipientEmail}`);
     console.log(err);
     return null;
   }
