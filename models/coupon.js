@@ -14,6 +14,10 @@ const CouponSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Please enter discount in percentage"],
     },
+    maxUseTimes: {
+      type: Number,
+      required: [true, "Please enter max use times"],
+    },
     timesUsed: {
       type: Number,
       default: 0,

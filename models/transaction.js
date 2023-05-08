@@ -72,6 +72,10 @@ const TransactionSchema = new mongoose.Schema(
     affiliateCodeDiscountAmount: {
       type: Number,
     },
+    comment: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,

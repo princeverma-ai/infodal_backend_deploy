@@ -32,7 +32,8 @@ Router.use(adminController.protect, adminController.restrictTo("super-admin"));
 Router.route("/transaction").get(paymentGatewayController.getAllTransactions);
 Router.route("/transaction/:id")
   .all(objectIdErrorHandler)
-  .get(paymentGatewayController.getTransaction);
+  .get(paymentGatewayController.getTransaction)
+  .patch(paymentGatewayController.updateTransaction);
 
 //Export Router ----------------------------------------------->
 module.exports = Router;

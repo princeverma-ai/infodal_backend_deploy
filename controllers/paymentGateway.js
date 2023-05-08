@@ -71,6 +71,7 @@ const paymentSuccessEventHandler = async (transaction) => {
               courseId: course._id,
             },
           },
+          $inc: { timesUsed: 1 },
         },
         {
           new: true,
@@ -165,6 +166,14 @@ exports.preCheckoutMiddleware = async (req, res, next) => {
         );
       }
 
+      if (coupon.maxUseTimes <= coupon.timesUsed) {
+        return sendErrorMessage(
+          res,
+          400,
+          "Coupon Code has been used maximum times"
+        );
+      }
+
       dicountPercent = coupon.discountInPercentage;
       checkoutPrice = checkoutPrice - (checkoutPrice * dicountPercent) / 100;
     }
@@ -186,6 +195,13 @@ exports.preCheckoutMiddleware = async (req, res, next) => {
           res,
           400,
           "Affiliate Code has expired or not yet started"
+        );
+      }
+      if (affiliate.maxUseTimes <= affiliate.timesUsed) {
+        return sendErrorMessage(
+          res,
+          400,
+          "Affiliate Code has been used maximum times"
         );
       }
 
@@ -470,6 +486,35 @@ exports.getTransaction = async (req, res) => {
   try {
     //GET TRANSACTION
     const transaction = await TransactionModel.findById(req.params.id);
+
+    if (!transaction) {
+      return sendErrorMessage(res, 404, "No transaction found");
+    }
+
+    //SEND RESPONSE
+    return res.status(200).json({
+      status: "success",
+      data: {
+        transaction,
+      },
+    });
+  } catch (error) {
+    return sendErrorMessage(res, 500, error.message);
+  }
+};
+
+//---------------------------------------------------------------->
+exports.updateTransaction = async (req, res) => {
+  try {
+    //GET TRANSACTION
+    const transaction = await TransactionModel.findByIdAndUpdate(
+      req.params.id,
+      { comment: req.body.comment },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!transaction) {
       return sendErrorMessage(res, 404, "No transaction found");

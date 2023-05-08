@@ -19,7 +19,6 @@ const InCashSchema = new mongoose.Schema(
         },
       },
     ],
-
     expiryDate: {
       type: Date,
       required: [true, "Please enter expiry date"],

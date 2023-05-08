@@ -17,6 +17,7 @@ const paymentGatewayRouter = require("./routes/paymentGateway");
 const manualTransactionRouter = require("./routes/manualTransaction");
 const couponRouter = require("./routes/coupon");
 const affiliateCodeRouter = require("./routes/affiliateCode");
+const inCashRouter = require("./routes/incash");
 const contentRouter = require("./routes/content");
 
 const statRouter = require("./routes/stat");
@@ -74,6 +75,7 @@ app.use("/paymentGateway", paymentGatewayRouter);
 app.use("/manualTransaction", manualTransactionRouter);
 app.use("/coupon", couponRouter);
 app.use("/affiliateCode", affiliateCodeRouter);
+app.use("/inCash", inCashRouter);
 
 app.use("/content", contentRouter);
 
