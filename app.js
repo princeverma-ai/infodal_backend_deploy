@@ -17,7 +17,7 @@ const paymentGatewayRouter = require("./routes/paymentGateway");
 const manualTransactionRouter = require("./routes/manualTransaction");
 const couponRouter = require("./routes/coupon");
 const affiliateCodeRouter = require("./routes/affiliateCode");
-const inCashRouter = require("./routes/incash");
+const inCashRouter = require("./routes/inCash");
 const contentRouter = require("./routes/content");
 
 const statRouter = require("./routes/stat");
