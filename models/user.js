@@ -160,7 +160,6 @@ userSchema.pre(/^find/, function (next) {
 
     this.populate({
       path: "inCashId",
-      select: "inCashAmount",
     });
 
     this.populate({
