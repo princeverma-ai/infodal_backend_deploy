@@ -100,7 +100,6 @@ const CourseSchema = new mongoose.Schema(
     },
     averagePackage: {
       type: Number,
-      required: [true, "Please enter course average package"],
     },
     isTrending: {
       type: Boolean,
