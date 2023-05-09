@@ -130,6 +130,9 @@ exports.createCourse = async (req, res) => {
       currency: process.env.CURRENCY,
     });
 
+    //add product id to req.body
+    req.body.stripeProductId = product.id;
+
     //add price id to req.body
     req.body.stripePriceId = price.id;
 
@@ -176,6 +179,19 @@ exports.updateCourse = async (req, res) => {
     //check faq value
     if (req.body.faq && !Array.isArray(req.body.faq)) {
       req.body.faq = [];
+    }
+
+    if (req.body.price) {
+      //get stripe price id
+      const stripePriceId = course.stripePriceId;
+
+      //update stripe price
+      const price = await stripe.prices.update(stripePriceId, {
+        unit_amount: req.body.price * 100,
+      });
+
+      //add price id to req.body
+      req.body.stripePriceId = price.id;
     }
 
     //Update course data

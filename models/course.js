@@ -92,6 +92,9 @@ const CourseSchema = new mongoose.Schema(
       required: [true, "Please enter course price"],
       min: [0, "Price cannot be negative"],
     },
+    stripeProductId: {
+      type: String,
+    },
     stripePriceId: {
       type: String,
     },
