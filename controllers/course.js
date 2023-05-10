@@ -381,6 +381,12 @@ exports.getExchangeRates = async (req, res) => {
     //check if document does not exist
     if (!exchangeRate) {
       await ExchangeRateModel.create({ exchangeData: {} });
+      return res.status(200).json({
+        status: "success",
+        data: {
+          exchangeData,
+        },
+      });
     }
 
     return res.status(200).json({
