@@ -15,6 +15,7 @@ class ApiFeatures {
       "fields",
       "search",
       "populateFields",
+      "currency",
     ];
     excludedFields.forEach((el) => delete queryObj[el]);
 

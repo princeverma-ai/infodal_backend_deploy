@@ -30,6 +30,18 @@ Router.route("/bulk").patch(
   courseController.bulkUpdateCourses
 );
 
+Router.route("/getExchangeRates").get(
+  adminController.protect,
+  adminController.restrictTo("super-admin"),
+  courseController.getExchangeRates
+);
+
+Router.route("/updateExchangeRates").patch(
+  adminController.protect,
+  adminController.restrictTo("super-admin"),
+  courseController.updateExchangeRates
+);
+
 Router.route("/:id")
   .all(objectIdErrorHandler)
   .get(courseController.getCourse)

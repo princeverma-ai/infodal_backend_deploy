@@ -1,12 +1,14 @@
 //imports ----------------------------------------------------->
 const CourseModel = require("../models/course");
 const ReviewModel = require("../models/review");
+const ExchangeRateModel = require("../models/exchangeRates");
 const ApiFeatures = require("../utils/apiFeatures");
 
 const imageHandler = require("../utils/imageHandler");
 
 const { sendErrorMessage } = require("../utils/errorHandler");
 const { stripe } = require("../utils/paymentInstance");
+const { getExchangeRates } = require("../utils/exchangeRates");
 
 //Error Handler----------------------------------------------->
 const notFoundErrorHandler = (req, res) => {
@@ -34,7 +36,29 @@ exports.getAllCourses = async (req, res) => {
     const totalDocuments = await totalDocumentsQuery.countDocuments();
 
     //EXECUTE QUERY
-    const courses = await features.query;
+    let courses = await features.query;
+
+    //CHANGE CURRENCY
+    if (req.query.currency) {
+      const exchangeData = await ExchangeRateModel.findOne();
+      const exchangeRates = exchangeData.exchangeData.conversion_rates;
+      const currency = req.query.currency.toUpperCase();
+
+      const newCourses = courses.map((course) => {
+        const price = course.price;
+        const discountInPrice = course.discountInPrice;
+
+        const newPrice = price * exchangeRates[currency];
+        const newDiscountInPrice = discountInPrice * exchangeRates[currency];
+
+        course.price = newPrice;
+        course.discountInPrice = newDiscountInPrice;
+
+        return course;
+      });
+
+      courses = newCourses;
+    }
 
     //ERROR HANDLING
     if (!courses.length) {
@@ -64,11 +88,26 @@ exports.getCourse = async (req, res) => {
     ).limitFields();
 
     //EXECUTE QUERY
-    const course = await apiFeatures.query;
+    let course = await apiFeatures.query;
 
     //ERROR HANDLING
     if (!course) {
       return notFoundErrorHandler(req, res);
+    }
+
+    if (req.query.currency) {
+      const exchangeData = await ExchangeRateModel.findOne();
+      const exchangeRates = exchangeData.exchangeData.conversion_rates;
+      const currency = req.query.currency.toUpperCase();
+
+      const price = course.price;
+      const discountInPrice = course.discountInPrice;
+
+      const newPrice = price * exchangeRates[currency];
+      const newDiscountInPrice = discountInPrice * exchangeRates[currency];
+
+      course.price = newPrice;
+      course.discountInPrice = newDiscountInPrice;
     }
 
     return res.status(200).json({
@@ -298,5 +337,59 @@ exports.bulkUpdateCourses = async (req, res) => {
     });
   } catch (err) {
     return sendErrorMessage(res, 400, err.message);
+  }
+};
+
+//------------------------------------------------------------>
+exports.updateExchangeRates = async (req, res) => {
+  try {
+    const exchangeData = await getExchangeRates();
+
+    const exchangeRate = await ExchangeRateModel.findOneAndUpdate(
+      {},
+      {
+        exchangeData: exchangeData,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    //check if document does not exist
+    if (!exchangeRate) {
+      await ExchangeRateModel.create({ exchangeData });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      data: {
+        exchangeData,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return sendErrorMessage(res, 500, err.message);
+  }
+};
+
+//------------------------------------------------------------>
+exports.getExchangeRates = async (req, res) => {
+  try {
+    const exchangeRate = await ExchangeRateModel.findOne();
+
+    //check if document does not exist
+    if (!exchangeRate) {
+      await ExchangeRateModel.create({ exchangeData: {} });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      data: {
+        exchangeData: exchangeRate.exchangeData,
+      },
+    });
+  } catch (err) {
+    return sendErrorMessage(res, 500, err.message);
   }
 };

@@ -8,6 +8,7 @@ const CourseModel = require("../models/course");
 const CouponModel = require("../models/coupon");
 const InCashModel = require("../models/inCash");
 const AffiliateCodeModel = require("../models/affiliateCode");
+const ExchangeRateModel = require("../models/exchangeRates");
 
 const emailHandler = require("../utils/emailHandler");
 const ApiFeatures = require("../utils/apiFeatures");
@@ -248,8 +249,23 @@ exports.preCheckoutMiddleware = async (req, res, next) => {
       return sendErrorMessage(res, 400, "Invalid Checkout Price");
     }
 
-    req.checkoutPrice = checkoutPrice;
-    req.checkoutCurrency = process.env.CURRENCY;
+    if (req.body.currency) {
+      req.checkoutCurrency = req.body.currency.toUpperCase();
+      const exchangeData = await ExchangeRateModel.findOne();
+      const exchangeRates = exchangeData.exchangeData.conversion_rates;
+
+      if (!exchangeRates[req.checkoutCurrency]) {
+        return sendErrorMessage(res, 400, "Invalid Currency");
+      }
+      req.checkoutPrice = checkoutPrice * exchangeRates[req.checkoutCurrency];
+
+      req.smallestUnit = process.env.CURRENCY_SMALLEST_UNIT_VALUE;
+    } else {
+      req.checkoutCurrency = process.env.CURRENCY;
+      req.checkoutPrice = checkoutPrice;
+      req.smallestUnit = process.env.CURRENCY_SMALLEST_UNIT_VALUE;
+    }
+
     req.course = course;
     req.user = user;
     req.coupon = coupon;
@@ -266,9 +282,7 @@ exports.preCheckoutMiddleware = async (req, res, next) => {
 exports.razorpayCheckout = async (req, res) => {
   try {
     //*ORDER---------------------------------------->
-    const priceSmallestUnit = Math.round(
-      req.checkoutPrice * process.env.CURRENCY_SMALLEST_UNIT_VALUE
-    );
+    const priceSmallestUnit = Math.round(req.checkoutPrice * req.smallestUnit);
     const options = {
       amount: priceSmallestUnit,
       currency: req.checkoutCurrency,

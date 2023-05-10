@@ -1,6 +1,8 @@
 //imports ----------------------------------------------------->
 const CourseModel = require("../models/course");
 const ApiFeatures = require("../utils/apiFeatures");
+const ExchangeRateModel = require("../models/exchangeRates");
+
 const { sendErrorMessage } = require("../utils/errorHandler");
 
 //*SEARCH PLACES - NAME , KEYWORDS
@@ -49,10 +51,32 @@ exports.courseSearch = async (req, res) => {
         .paginate();
 
       //EXECUTE QUERY
-      const courses = await features.query;
+      let courses = await features.query;
 
       if (!courses.length) {
         return sendErrorMessage(res, 404, "No courses found");
+      }
+
+      //CHANGE CURRENCY
+      if (req.query.currency) {
+        const exchangeData = await ExchangeRateModel.findOne();
+        const exchangeRates = exchangeData.exchangeData.conversion_rates;
+        const currency = req.query.currency.toUpperCase();
+
+        const newCourses = courses.map((course) => {
+          const price = course.price;
+          const discountInPrice = course.discountInPrice;
+
+          const newPrice = price * exchangeRates[currency];
+          const newDiscountInPrice = discountInPrice * exchangeRates[currency];
+
+          course.price = newPrice;
+          course.discountInPrice = newDiscountInPrice;
+
+          return course;
+        });
+
+        courses = newCourses;
       }
 
       return res.status(200).json({
@@ -85,10 +109,32 @@ exports.courseSearch = async (req, res) => {
         .paginate();
 
       //EXECUTE QUERY
-      const courses = await features.query;
+      let courses = await features.query;
 
       if (!courses.length) {
         return sendErrorMessage(res, 404, "No courses found");
+      }
+
+      //CHANGE CURRENCY
+      if (req.query.currency) {
+        const exchangeData = await ExchangeRateModel.findOne();
+        const exchangeRates = exchangeData.exchangeData.conversion_rates;
+        const currency = req.query.currency.toUpperCase();
+
+        const newCourses = courses.map((course) => {
+          const price = course.price;
+          const discountInPrice = course.discountInPrice;
+
+          const newPrice = price * exchangeRates[currency];
+          const newDiscountInPrice = discountInPrice * exchangeRates[currency];
+
+          course.price = newPrice;
+          course.discountInPrice = newDiscountInPrice;
+
+          return course;
+        });
+
+        courses = newCourses;
       }
 
       return res.status(200).json({
