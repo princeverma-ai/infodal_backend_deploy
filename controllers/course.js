@@ -165,7 +165,7 @@ exports.createCourse = async (req, res) => {
     //create stripe price
     const price = await stripe.prices.create({
       product: product.id,
-      unit_amount: req.body.price * 100,
+      unit_amount: req.body.price * process.env.CURRENCY_SMALLEST_UNIT_VALUE,
       currency: process.env.CURRENCY,
     });
 
@@ -221,16 +221,22 @@ exports.updateCourse = async (req, res) => {
     }
 
     if (req.body.price) {
-      //get stripe price id
-      const stripePriceId = course.stripePriceId;
+      //create srtipe product
+      const product = await stripe.products.create({
+        name: course.name,
+      });
 
-      //update stripe price
-      const price = await stripe.prices.update(stripePriceId, {
-        unit_amount: req.body.price * 100,
+      //create stripe price
+      const price = await stripe.prices.create({
+        product: product.id,
+        unit_amount: req.body.price * process.env.CURRENCY_SMALLEST_UNIT_VALUE,
+        currency: process.env.CURRENCY,
       });
 
       //add price id to req.body
       req.body.stripePriceId = price.id;
+
+      req.body.stripeProductId = product.id;
     }
 
     //Update course data
@@ -246,6 +252,7 @@ exports.updateCourse = async (req, res) => {
       },
     });
   } catch (err) {
+    console.log(err);
     return sendErrorMessage(res, 400, err.message);
   } finally {
     if (req.file) {
