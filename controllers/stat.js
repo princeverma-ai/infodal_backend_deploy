@@ -148,7 +148,7 @@ exports.getAllStats = async (req, res) => {
     );
 
     const stats = await Promise.all([
-      User.countDocuments(),
+      User.countDocuments({ active: true }),
       ManualTransaction.countDocuments(),
       Transaction.countDocuments(),
       Coupon.countDocuments(),

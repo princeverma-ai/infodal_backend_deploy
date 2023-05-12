@@ -288,9 +288,11 @@ exports.adminAddUser = async (req, res, next) => {
     //check if email is already present in database
     const query = UserModel.findOne({
       email: req.body.email,
-    });
+    }).select("+active");
     query.bypassInactiveCheck = true;
     const availableUser = await query;
+
+    console.log(availableUser);
 
     if (availableUser) {
       //check if user is not active
