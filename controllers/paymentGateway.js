@@ -249,23 +249,9 @@ exports.preCheckoutMiddleware = async (req, res, next) => {
       return sendErrorMessage(res, 400, "Invalid Checkout Price");
     }
 
-    if (req.body.currency) {
-      req.checkoutCurrency = req.body.currency.toUpperCase();
-      const exchangeData = await ExchangeRateModel.findOne();
-      const exchangeRates = exchangeData.exchangeData.conversion_rates;
-
-      if (!exchangeRates[req.checkoutCurrency]) {
-        return sendErrorMessage(res, 400, "Invalid Currency");
-      }
-      req.checkoutPrice = checkoutPrice * exchangeRates[req.checkoutCurrency];
-
-      req.smallestUnit = process.env.CURRENCY_SMALLEST_UNIT_VALUE;
-    } else {
-      req.checkoutCurrency = process.env.CURRENCY;
-      req.checkoutPrice = checkoutPrice;
-      req.smallestUnit = process.env.CURRENCY_SMALLEST_UNIT_VALUE;
-    }
-
+    req.checkoutCurrency = process.env.CURRENCY;
+    req.checkoutPrice = checkoutPrice;
+    req.smallestUnit = process.env.CURRENCY_SMALLEST_UNIT_VALUE;
     req.course = course;
     req.user = user;
     req.coupon = coupon;

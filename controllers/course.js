@@ -221,6 +221,11 @@ exports.updateCourse = async (req, res) => {
     }
 
     if (req.body.price) {
+      //delete old stripe product
+      await stripe.products.update(course.stripeProductId, {
+        active: false,
+      });
+
       //create srtipe product
       const product = await stripe.products.create({
         name: course.name,
@@ -325,16 +330,67 @@ exports.bulkUpdateCourses = async (req, res) => {
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    const updateResults = await CourseModel.updateMany(
-      JSON.parse(queryStr),
-      {
-        $set: req.body,
-      },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+    const coursesToUpdate = await CourseModel.find(JSON.parse(queryStr));
+
+    if (!coursesToUpdate.length) {
+      return sendErrorMessage(res, 404, "No courses found");
+    }
+
+    let updateResults;
+
+    if (req.body.price) {
+      //delete old stripe products
+      await Promise.all(
+        coursesToUpdate.map(async (course) => {
+          await stripe.products.update(course.stripeProductId, {
+            active: false,
+          });
+        })
+      );
+
+      //create new stripe products
+      const products = await Promise.all(
+        coursesToUpdate.map(async (course) => {
+          return await stripe.products.create({
+            name: course.name,
+          });
+        })
+      );
+
+      //create new stripe prices
+      const prices = await Promise.all(
+        products.map(async (product) => {
+          return await stripe.prices.create({
+            product: product.id,
+            unit_amount:
+              req.body.price * process.env.CURRENCY_SMALLEST_UNIT_VALUE,
+            currency: process.env.CURRENCY,
+          });
+        })
+      );
+
+      //update course data
+      coursesToUpdate.forEach((course, index) => {
+        course.stripeProductId = products[index].id;
+        course.stripePriceId = prices[index].id;
+      });
+
+      //update courses
+      updateResults = await Promise.all(
+        coursesToUpdate.map(async (course) => {
+          course.set(req.body);
+          return await course.save();
+        })
+      );
+    } else {
+      //update courses
+      updateResults = await Promise.all(
+        coursesToUpdate.map(async (course) => {
+          course.set(req.body);
+          return await course.save();
+        })
+      );
+    }
 
     return res.status(200).json({
       status: "success",

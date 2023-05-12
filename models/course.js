@@ -1,9 +1,6 @@
 //imports ----------------------------------------------------->
 const mongoose = require("mongoose");
 
-//Model imports ----------------------------------------------->
-const ExchangeRateModel = require("./exchangeRates");
-
 //Schema ------------------------------------------------------>
 const CourseSchema = new mongoose.Schema(
   {
