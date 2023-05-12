@@ -44,7 +44,7 @@ exports.getAllReviews = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -65,7 +65,7 @@ exports.getReview = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -80,7 +80,7 @@ exports.createReview = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -137,7 +137,7 @@ exports.updateReview = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -177,6 +177,6 @@ exports.deleteReview = async (req, res) => {
       data: null,
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };

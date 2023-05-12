@@ -41,7 +41,7 @@ exports.getAllAffiliateCodes = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -61,7 +61,7 @@ exports.getAffiliateCode = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -79,7 +79,7 @@ exports.createAffiliateCode = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -105,7 +105,7 @@ exports.updateAffiliateCode = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -124,6 +124,6 @@ exports.deleteAffiliateCode = async (req, res) => {
       data: null,
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };

@@ -102,7 +102,7 @@ exports.signup = async (req, res) => {
       message: `verification token sent to email : ${admin.email}`,
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -133,7 +133,7 @@ exports.verifyEmail = async (req, res) => {
 
     return res.status(200).send("Email verified successfully");
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -164,7 +164,7 @@ exports.verifyAdmin = async (req, res) => {
 
     return res.status(200).send("Admin verified successfully");
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -216,7 +216,7 @@ exports.login = async (req, res) => {
       admin,
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -270,7 +270,7 @@ exports.protect = async (req, res, next) => {
     req.admin = currentAdmin;
     next();
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -309,10 +309,7 @@ exports.forgotPassword = async (req, res, next) => {
       message: "Reset Token sent to email",
     });
   } catch (error) {
-    res.status(401).json({
-      status: "fail",
-      message: error.message,
-    });
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -354,7 +351,7 @@ exports.resetPassword = async (req, res, next) => {
       admin,
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -384,7 +381,7 @@ exports.updatePassword = async (req, res, next) => {
       admin,
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -396,7 +393,7 @@ exports.getAdmin = async (req, res, next) => {
       admin: req.admin,
     });
   } catch (error) {
-    return sendErrorMessage(res, 401, error.message);
+    return sendErrorMessage(res, 401, error.message, true);
   }
 };
 
@@ -427,7 +424,7 @@ exports.updateAdmin = async (req, res, next) => {
       admin: updatedAdmin,
     });
   } catch (error) {
-    sendErrorMessage(res, 400, error.message);
+    sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -451,10 +448,7 @@ exports.deleteAdmin = async (req, res, next) => {
       data: null,
     });
   } catch (error) {
-    res.status(401).json({
-      status: "fail",
-      message: error.message,
-    });
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 

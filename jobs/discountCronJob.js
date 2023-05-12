@@ -42,7 +42,6 @@ exports.discountCronJob = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };

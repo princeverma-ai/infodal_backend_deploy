@@ -41,7 +41,7 @@ exports.getAllCoupons = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -61,7 +61,7 @@ exports.getCoupon = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -79,7 +79,7 @@ exports.createCoupon = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -105,7 +105,7 @@ exports.updateCoupon = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -122,6 +122,6 @@ exports.deleteCoupon = async (req, res) => {
       data: null,
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };

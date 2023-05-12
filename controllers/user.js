@@ -45,7 +45,7 @@ exports.getAllUsers = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -59,7 +59,7 @@ exports.getUser = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -90,7 +90,7 @@ exports.updateUser = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -113,7 +113,7 @@ exports.setUserInactive = async (req, res) => {
       data: null,
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -170,7 +170,7 @@ exports.addToCart = async (req, res) => {
       message: `course - ${courseId} added to cart`,
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -208,7 +208,7 @@ exports.removeFromCart = async (req, res) => {
       message: `course - ${courseId} removed from cart`,
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -240,7 +240,7 @@ exports.getUserTransactions = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -262,7 +262,7 @@ exports.getUserInCash = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -291,8 +291,6 @@ exports.adminAddUser = async (req, res, next) => {
     }).select("+active");
     query.bypassInactiveCheck = true;
     const availableUser = await query;
-
-    console.log(availableUser);
 
     if (availableUser) {
       //check if user is not active
@@ -333,7 +331,7 @@ exports.adminAddUser = async (req, res, next) => {
       user,
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -371,7 +369,7 @@ exports.adminUpdateUser = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -393,7 +391,7 @@ exports.adminDeleteUser = async (req, res) => {
       data: null,
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -430,6 +428,6 @@ exports.getDeactivatedUsers = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };

@@ -41,7 +41,7 @@ exports.getAllTransactions = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -58,7 +58,7 @@ exports.getTransaction = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -92,7 +92,7 @@ exports.createTransaction = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -120,7 +120,7 @@ exports.updateTransaction = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -139,6 +139,6 @@ exports.deleteTransaction = async (req, res) => {
       data: null,
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };

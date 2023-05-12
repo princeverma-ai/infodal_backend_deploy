@@ -147,6 +147,6 @@ exports.courseSearch = async (req, res) => {
       });
     }
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };

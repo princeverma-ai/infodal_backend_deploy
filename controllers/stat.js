@@ -184,6 +184,6 @@ exports.getAllStats = async (req, res) => {
       monthlyInstructorStats,
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };

@@ -22,7 +22,6 @@ const addImageDataToDB = async (file, data) => {
     const img = await ImageModel.create(imgOject);
     return img;
   } catch (error) {
-    console.log(error);
     return new Error(error);
   }
 };
@@ -32,7 +31,6 @@ const deleteImageFromDB = async (id) => {
     const img = await ImageModel.findByIdAndDelete(id);
     return img;
   } catch (error) {
-    console.log(error);
     return new Error(error);
   }
 };
@@ -49,7 +47,6 @@ exports.addImage = async (file) => {
     //return image data
     return img;
   } catch (error) {
-    console.log(error);
     return new Error(error);
   }
 };
@@ -68,7 +65,6 @@ exports.deleteImage = async (id) => {
 
     return img;
   } catch (error) {
-    console.log(error);
     return new Error(error);
   }
 };
@@ -94,7 +90,6 @@ exports.replaceImage = async (file, old_image_id) => {
     //return image data
     return newImg;
   } catch (error) {
-    console.log(error);
     return new Error(error);
   }
 };

@@ -13,7 +13,15 @@ exports.objectIdErrorHandler = (req, res, next) => {
 };
 
 //------------------------------------------------------------>
-exports.sendErrorMessage = (res, status, message) => {
+exports.sendErrorMessage = (res, status, message, isServerError = false) => {
+  if (isServerError) {
+    console.log("ERROR: ", message);
+    return res.status(500).json({
+      status: "fail",
+      message: "Something went wrong",
+    });
+  }
+
   if (message.includes("duplicate key")) message = "Duplicate Entry Found";
 
   if (message.includes("Cast to ObjectId failed")) message = "Invalid ID";

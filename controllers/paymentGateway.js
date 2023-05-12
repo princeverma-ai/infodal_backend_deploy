@@ -8,7 +8,6 @@ const CourseModel = require("../models/course");
 const CouponModel = require("../models/coupon");
 const InCashModel = require("../models/inCash");
 const AffiliateCodeModel = require("../models/affiliateCode");
-const ExchangeRateModel = require("../models/exchangeRates");
 
 const emailHandler = require("../utils/emailHandler");
 const ApiFeatures = require("../utils/apiFeatures");
@@ -259,8 +258,7 @@ exports.preCheckoutMiddleware = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log(error);
-    return sendErrorMessage(res, 500, "Internal Server Error");
+    return sendErrorMessage(res, 500, "Internal Server Error", true);
   }
 };
 
@@ -306,8 +304,7 @@ exports.razorpayCheckout = async (req, res) => {
       order,
     });
   } catch (error) {
-    console.log(error);
-    return sendErrorMessage(res, 500, error.message);
+    return sendErrorMessage(res, 500, error.message, true);
   }
 };
 
@@ -349,8 +346,7 @@ exports.razorpayPaymentVerification = async (req, res) => {
       return sendErrorMessage(res, 400, "Payment Failed Invalid Signature");
     }
   } catch (error) {
-    console.log(error);
-    return sendErrorMessage(res, 500, error.message);
+    return sendErrorMessage(res, 500, error.message, true);
   }
 };
 
@@ -399,8 +395,7 @@ exports.stripeCheckout = async (req, res) => {
         : null,
     });
   } catch (error) {
-    console.log(error);
-    return sendErrorMessage(res, 500, error.message);
+    return sendErrorMessage(res, 500, error.message, true);
   }
 };
 
@@ -477,7 +472,7 @@ exports.getAllTransactions = async (req, res) => {
       },
     });
   } catch (error) {
-    return sendErrorMessage(res, 500, error.message);
+    return sendErrorMessage(res, 500, error.message, true);
   }
 };
 
@@ -499,7 +494,7 @@ exports.getTransaction = async (req, res) => {
       },
     });
   } catch (error) {
-    return sendErrorMessage(res, 500, error.message);
+    return sendErrorMessage(res, 500, error.message, true);
   }
 };
 
@@ -528,6 +523,6 @@ exports.updateTransaction = async (req, res) => {
       },
     });
   } catch (error) {
-    return sendErrorMessage(res, 500, error.message);
+    return sendErrorMessage(res, 500, error.message, true);
   }
 };

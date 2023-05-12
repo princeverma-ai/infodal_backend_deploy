@@ -74,7 +74,7 @@ exports.getAllCourses = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -117,7 +117,7 @@ exports.getCourse = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -184,7 +184,7 @@ exports.createCourse = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   } finally {
     if (req.file) {
       imageHandler.deleteUnusedImage(req.file);
@@ -257,8 +257,7 @@ exports.updateCourse = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   } finally {
     if (req.file) {
       imageHandler.deleteUnusedImage(req.file);
@@ -283,7 +282,7 @@ exports.deleteCourse = async (req, res) => {
       data: null,
     });
   } catch (err) {
-    return sendErrorMessage(res, 404, err.message);
+    return sendErrorMessage(res, 404, err.message, true);
   }
 };
 
@@ -316,7 +315,7 @@ exports.getCourseReviews = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 404, err.message);
+    return sendErrorMessage(res, 404, err.message, true);
   }
 };
 
@@ -399,7 +398,7 @@ exports.bulkUpdateCourses = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 400, err.message);
+    return sendErrorMessage(res, 400, err.message, true);
   }
 };
 
@@ -431,8 +430,7 @@ exports.updateExchangeRates = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
-    return sendErrorMessage(res, 500, err.message);
+    return sendErrorMessage(res, 500, err.message, true);
   }
 };
 
@@ -453,6 +451,6 @@ exports.getExchangeRates = async (req, res) => {
       },
     });
   } catch (err) {
-    return sendErrorMessage(res, 500, err.message);
+    return sendErrorMessage(res, 500, err.message, true);
   }
 };

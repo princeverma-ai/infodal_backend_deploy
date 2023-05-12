@@ -107,7 +107,7 @@ exports.signup = async (req, res) => {
       message: `verification token sent to email : ${user.email}`,
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -163,7 +163,7 @@ exports.verifyEmail = async (req, res) => {
 
     return res.status(200).send("Email verified successfully");
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -224,7 +224,7 @@ exports.login = async (req, res) => {
       user,
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -276,7 +276,7 @@ exports.protect = async (req, res, next) => {
     req.user = currentUser;
     next();
   } catch (error) {
-    sendErrorMessage(res, 400, error.message);
+    sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -316,7 +316,7 @@ exports.forgotPassword = async (req, res, next) => {
       message: "Reset Token sent to email",
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -358,7 +358,7 @@ exports.resetPassword = async (req, res, next) => {
       user,
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
 
@@ -386,6 +386,6 @@ exports.updatePassword = async (req, res, next) => {
       user,
     });
   } catch (error) {
-    return sendErrorMessage(res, 400, error.message);
+    return sendErrorMessage(res, 400, error.message, true);
   }
 };
