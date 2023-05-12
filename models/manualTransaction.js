@@ -14,7 +14,6 @@ const manualTransactionSchema = new mongoose.Schema(
     },
     userPhoneNumber: {
       type: String,
-      required: [true, "Please enter user phone number"],
     },
     courseName: {
       type: String,
